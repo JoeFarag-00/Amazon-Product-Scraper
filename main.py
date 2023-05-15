@@ -23,13 +23,16 @@ def Scrape_Amazon():
         try:
             try:
                 product_page = element.find_element(By.CSS_SELECTOR, 'a.a-link-normal.s-underline-text.s-underline-link-text.s-link-style.a-text-normal').get_attribute('href')
+                
             except NoSuchElementException:
                 product_page = "Null"
             
             try:
                 product_name = element.find_element(By.CSS_SELECTOR, 'span.a-size-medium.a-color-base.a-text-normal').text
+                company_name = product_name.split(' ')[0]
             except NoSuchElementException:
                 product_name = "Null"
+                company_name = "Null"
             
             try:
                 price = element.find_element(By.CSS_SELECTOR, 'span.a-price-whole').text
@@ -40,13 +43,15 @@ def Scrape_Amazon():
                 rating = element.find_element(By.CSS_SELECTOR, 'span[aria-label*=" out of 5 stars"]').get_attribute('aria-label').split(' out of 5 stars')[0]
             except NoSuchElementException:
                 rating = "Null"
+                
             # company_name = element.find_element(By.CSS_SELECTOR, 'div[data-component-type="s-search-result"] span.a-size-small.a-color-secondary.a-text-normal').text.split('by ')[-1]# NOT Scrapable
+            
             try:
                 product_image = element.find_elements(By.CSS_SELECTOR, 'div[data-component-type="s-search-result"] img')[0].get_attribute('src')
             except NoSuchElementException:
                 product_image = "Null"
                 
-            products.append([product_page, product_name, price, rating, product_image])
+            products.append([product_page, product_name, company_name, price, rating, product_image])
         except:
             ct+=1
     
@@ -63,7 +68,7 @@ def Scrape_Amazon():
 
     with open('products.csv', 'a', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
-        writer.writerow(['Product Page', 'Product Name','Price', 'Ratings', 'Product Image'])
+        writer.writerow(['Product Page', 'Product Name','Company Name','Price', 'Ratings', 'Product Image'])
         writer.writerows(products)
 
 root = Tk()
