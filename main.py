@@ -3,6 +3,7 @@ import csv
 from selenium.webdriver.common.by import By
 from tkinter import *
 import time
+import os
 from selenium.common.exceptions import NoSuchElementException
 
 def Scrape_Amazon():
@@ -23,27 +24,27 @@ def Scrape_Amazon():
             try:
                 product_page = element.find_element(By.CSS_SELECTOR, 'a.a-link-normal.s-underline-text.s-underline-link-text.s-link-style.a-text-normal').get_attribute('href')
             except NoSuchElementException:
-                product_page = "Lost"
+                product_page = "Null"
             
             try:
                 product_name = element.find_element(By.CSS_SELECTOR, 'span.a-size-medium.a-color-base.a-text-normal').text
             except NoSuchElementException:
-                product_name = "Lost"
+                product_name = "Null"
             
             try:
                 price = element.find_element(By.CSS_SELECTOR, 'span.a-price-whole').text
             except NoSuchElementException:
-                price = "Lost"
+                price = "Null"
             
             try:
                 rating = element.find_element(By.CSS_SELECTOR, 'span[aria-label*=" out of 5 stars"]').get_attribute('aria-label').split(' out of 5 stars')[0]
             except NoSuchElementException:
-                rating = "Lost"
+                rating = "Null"
             # company_name = element.find_element(By.CSS_SELECTOR, 'div[data-component-type="s-search-result"] span.a-size-small.a-color-secondary.a-text-normal').text.split('by ')[-1]# NOT Scrapable
             try:
                 product_image = element.find_elements(By.CSS_SELECTOR, 'div[data-component-type="s-search-result"] img')[0].get_attribute('src')
             except NoSuchElementException:
-                product_image = "Lost"
+                product_image = "Null"
                 
             products.append([product_page, product_name, price, rating, product_image])
         except:
@@ -54,6 +55,11 @@ def Scrape_Amazon():
     print(products)
 
     driver.quit()
+    
+    csv_file_path = 'products.csv'
+    if os.path.exists(csv_file_path):
+        with open(csv_file_path, 'w', newline='', encoding='utf-8') as file:
+            pass  
 
     with open('products.csv', 'a', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
