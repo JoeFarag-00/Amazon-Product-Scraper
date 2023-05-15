@@ -1,4 +1,4 @@
-# Selenium
+# Selenium 4.0
 
 <a href="https://selenium.dev"><img src="https://selenium.dev/images/selenium_logo_square_green.png" width="180" alt="Selenium"/></a>
 
